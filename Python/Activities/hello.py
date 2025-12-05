@@ -1,2 +1,4 @@
-name = "samudra"
-print (name[2])
+import requests
+
+response = requests.get("https://training-support.net")
+print (response)
