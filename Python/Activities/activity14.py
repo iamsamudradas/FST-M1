@@ -5,7 +5,6 @@ def fibonacci(number):
         return(fibonacci(number-1) + fibonacci(number-2))
 
 nterms = int(input("Enter a number: "))
-except: print("error")
 
 if nterms <= 0:
     print("Please enter a positive number")
