@@ -1,83 +1,20 @@
-package Activities;
+package testRunner;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.time.Duration;
-import java.util.List;
+import org.junit.platform.suite.api.Suite;
+import org.junit.platform.suite.api.IncludeEngines;
+import org.junit.platform.suite.api.ConfigurationParameter;
+import org.junit.platform.suite.api.SelectClasspathResource;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Test;
+import io.cucumber.junit.platform.engine.Constants;
 
-import io.appium.java_client.AppiumBy;
-import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.android.options.UiAutomator2Options;
+@Suite
+@IncludeEngines("cucumber")
+@SelectClasspathResource("Features")
+@ConfigurationParameter(key = Constants.GLUE_PROPERTY_NAME, value = "stepDefinitions")
+@ConfigurationParameter(key = Constants.FILTER_TAGS_PROPERTY_NAME, value = "@activity3")
+@ConfigurationParameter(
+	key = Constants.PLUGIN_PROPERTY_NAME,
+	value = "pretty, html:Reports/HTML_Report.html, junit:Reports/XML_Report.xml, json:Reports/JSON_Report.json"
+)
 
-public class Activity7 {
-	// Driver Declaration
-	AndroidDriver driver;
-	WebDriverWait wait;
-
-	// Set up method
-	@BeforeClass
-	public void setUp() throws MalformedURLException, URISyntaxException {
-		// Desired Capabilities
-		UiAutomator2Options options = new UiAutomator2Options();
-		options.setPlatformName("android");
-		options.setAutomationName("UiAutomator2");
-		options.setAppPackage("com.android.chrome");
-		options.setAppActivity("com.google.android.apps.chrome.Main");
-		options.noReset();
-
-		// Server Address
-		URL serverURL = new URI("http://localhost:4723").toURL();
-
-		// Driver Initialization
-		driver = new AndroidDriver(serverURL, options);
-		wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-		// Open the page in Chrome
-		driver.get("https://training-support.net/webelements/lazy-loading");
-	}
-
-	// Test method
-	@Test
-	public void uiScrollableTest() {
-		// Wait for page to load
-		wait.until(ExpectedConditions.visibilityOfElementLocated(AppiumBy.className("android.widget.Image")));
-		// UiScrollable object string
-		String UiScrollable = "UiScrollable(UiSelector().scrollable(true))";
-
-		// Find all the image elements on the page
-		List<WebElement> imageElements = driver.findElements(AppiumBy.className("android.widget.Image"));
-		// Print the number of images
-		System.out.println("Before scroll: " + imageElements.size());
-
-		// Scroll to required element
-		String imageText = driver.findElement(AppiumBy
-		.androidUIAutomator(UiScrollable + ".scrollForward(25).getChildByText(className(\"android.widget.Image\"), \"Helen\")"))
-		.getText();
-		System.out.println("Found " + imageText + "!");
-
-		// Get image elements after scroll
-		imageElements = driver.findElements(AppiumBy.className("android.widget.Image"));
-		// Print the number of images after scroll
-		System.out.println("After scroll: " + imageElements.size());
-
-		// Assertions
-		Assert.assertEquals(imageElements.size(), 3);
-	}
-
-	// Tear down method
-	@AfterClass
-	public void tearDown() {
-		// Close the app
-		driver.quit();
-	}
-}
+public class Activity7 {}
